@@ -3,16 +3,17 @@ import sys
 sys.path.append('D:\\MLPROJECT\\src')
 from exception import CustomeException
 from logger import logging
-import pandas as pd
+import pandas as pd # type: ignore
  
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split # type: ignore
 from dataclasses import dataclass
 
 @dataclass
 class DataIngestionConfig:
     train_data_path: str=os.path.join('artifacts',"train.csv")
-    raw_data_path: str=os.path.join('artifacts',"raw.csv")
     test_data_path: str=os.path.join('artifacts',"test.csv")
+    raw_data_path: str=os.path.join('artifacts',"raw.csv")
+    
 
 class DataIngestion:
     def __init__(self):
@@ -23,5 +24,28 @@ class DataIngestion:
         try:
             df=pd.read_csv('notebook\data\stud.csv')
             logging.info('read The dataset as dataframe')
-        except:
-            pass
+            
+            os.makedirs(os.path.dirname(self.ingestion_config.train_data_path),exist_ok=True) 
+            
+            df.to_csv(self.ingestion_config.raw_data_path,index=False,header=True)
+            
+            logging.info("Train test spilt initiated")
+            train_set,test_set=train_test_split(df,test_size=0.2,random_state=42)
+            
+            train_set.to_csv(self.ingestion_config.train_data_path,index=False,header=True)
+            
+            test_set.to_csv(self.ingestion_config.test_data_path,index=False,header=True)
+            
+            logging.info("Inmgetion is completed")
+            
+            return(
+                self.ingestion_config.train_data_path,
+                self.ingestion_config.test_data_path
+            )
+            
+        except Exception as e:
+            raise CustomeException(e,sys)
+            
+if __name__=="__main__":
+    obj=DataIngestion()
+    obj.initiate_data_ingestion()

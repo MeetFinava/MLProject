@@ -1,0 +1,4 @@
+[ 2024-09-10 19:35:27,557 ] 22 root - INFO - Entered the data ingestion method of componet
+[ 2024-09-10 19:35:27,560 ] 25 root - INFO - read The dataset as dataframe
+[ 2024-09-10 19:35:27,563 ] 31 root - INFO - Train test spilt initiated
+[ 2024-09-10 19:35:27,569 ] 38 root - INFO - Inmgetion is completed
